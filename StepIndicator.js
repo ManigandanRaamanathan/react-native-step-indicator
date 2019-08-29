@@ -42,7 +42,8 @@ export default class StepIndicator extends Component {
       labelColor: '#000000',
       labelSize: 13,
       labelAlign: 'center',
-      currentStepLabelColor: '#4aae4f'
+      currentStepLabelColor: '#4aae4f',
+      stepLabelContainer: {}
     }
     const customStyles = Object.assign(defaultStyles, props.customStyles)
 
@@ -241,16 +242,16 @@ export default class StepIndicator extends Component {
     const { labels, direction, currentPosition, renderLabel } = this.props
     var labelViews = labels.map((label, index) => {
       const selectedStepLabelStyle =
-        index === currentPosition
+        index <= currentPosition
           ? { color: this.state.customStyles.currentStepLabelColor }
           : { color: this.state.customStyles.labelColor }
       return (
         <TouchableWithoutFeedback
-          style={styles.stepLabelItem}
+          style={[styles.stepLabelItem, this.state.customStyles.stepLabelItem]}
           key={index}
           onPress={() => this.stepPressed(index)}
         >
-          <View style={styles.stepLabelItem}>
+          <View style={[styles.stepLabelItem, this.state.customStyles.stepLabelContainer, this.state.customStyles.stepLabelItem]}>
             {renderLabel ? (
               renderLabel({
                 position: index,
@@ -266,7 +267,8 @@ export default class StepIndicator extends Component {
                   {
                     fontSize: this.state.customStyles.labelSize,
                     fontFamily: this.state.customStyles.labelFontFamily
-                  }
+                  },
+                  this.state.customStyles.stepLabel
                 ]}
               >
                 {label}
@@ -439,7 +441,7 @@ const styles = StyleSheet.create({
   stepLabel: {
     fontSize: 12,
     textAlign: 'center',
-    fontWeight: '500'
+    // fontWeight: '500'
   },
   stepLabelItem: {
     flex: 1,
